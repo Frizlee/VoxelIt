@@ -1,6 +1,6 @@
 #include <VoxelIt\Vertex.hpp>
 using namespace vit;
-using namespace glm;
+using glm::vec3;
 
 
 Vertex::Vertex(vec3 position, vec3 color, vec3 normal)
@@ -37,3 +37,4 @@ void Vertex::setNormal(vec3& normal)
 {
     mNormal = normal;
 }
+

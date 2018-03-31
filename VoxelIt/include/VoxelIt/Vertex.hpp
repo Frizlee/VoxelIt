@@ -1,20 +1,21 @@
 #pragma once
 #include <VoxelIt\Prerequisites.hpp>
 #include <glm\glm.hpp>
+#include <nlohmann\json.hpp>
 
 namespace vit
 {
-    class VOXELIT_API Vertex
+    class Vertex
     {
     public:
-        Vertex(glm::vec3 position = glm::vec3(), glm::vec3 color = glm::vec3(), glm::vec3 normal = glm::vec3());
+        VOXELIT_API Vertex(glm::vec3 position = glm::vec3(), glm::vec3 color = glm::vec3(), glm::vec3 normal = glm::vec3());
 
-        glm::vec3 getPosition() const;
-        void setPosition(glm::vec3& position);
-        glm::vec3 getColor() const;
-        void setColor(glm::vec3& color);
-        glm::vec3 getNormal() const;
-        void setNormal(glm::vec3& normal);
+        glm::vec3 VOXELIT_API getPosition() const;
+        void VOXELIT_API setPosition(glm::vec3& position);
+        glm::vec3 VOXELIT_API getColor() const;
+        void VOXELIT_API setColor(glm::vec3& color);
+        glm::vec3 VOXELIT_API getNormal() const;
+        void VOXELIT_API setNormal(glm::vec3& normal);
 
     private:
         glm::vec3 mPosition;

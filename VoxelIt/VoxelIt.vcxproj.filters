@@ -32,5 +32,8 @@
     <ClInclude Include="include\VoxelIt\Vertex.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\voxelit\JsonSerializers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

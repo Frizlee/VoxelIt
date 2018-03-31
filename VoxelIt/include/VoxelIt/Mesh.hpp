@@ -5,10 +5,10 @@
 
 namespace vit
 {
-    class VOXELIT_API Mesh
+    class Mesh
     {
     public:
-        Mesh();
+        VOXELIT_API Mesh();
 
     private:
         std::vector<uint16_t> mIndices;
