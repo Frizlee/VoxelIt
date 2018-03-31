@@ -7,8 +7,3 @@ Mesh::Mesh()
 {
     std::cout << "Hello world!" << std::endl;
 }
-
-
-Mesh::~Mesh()
-{
-}

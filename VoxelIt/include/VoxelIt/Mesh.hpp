@@ -1,5 +1,7 @@
 #pragma once
 #include <VoxelIt/Prerequisites.hpp>
+#include <VoxelIt/Vertex.hpp>
+#include <vector>
 
 namespace vit
 {
@@ -7,6 +9,9 @@ namespace vit
     {
     public:
         Mesh();
-        ~Mesh();
+
+    private:
+        std::vector<uint16_t> mIndices;
+        std::vector<Vertex> mVertices;
     };
 }
