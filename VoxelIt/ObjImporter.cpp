@@ -16,7 +16,27 @@ vector<string> ObjImporter::getSupportedExtensions()
 shared_ptr<Resource> ObjImporter::import(experimental::filesystem::path filePath)
 {
     auto mesh = make_shared<Mesh>();
+    auto vertices = vector<Vertex>
+    {
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } },
+        { { 0.0f, 0.0f, 0.0f } }
+    };
 
+    mesh->setVertices(vertices);
 
 
     return dynamic_pointer_cast<Resource>(mesh);
