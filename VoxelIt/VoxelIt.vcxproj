@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(GLM_DIR)\include;$(NLOHMANN_JSON_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VOXELIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DLL|x64'">
@@ -88,6 +89,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(GLM_DIR)\include;$(NLOHMANN_JSON_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VOXELIT_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -100,6 +102,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(GLM_DIR)\include;$(NLOHMANN_JSON_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VOXELIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -116,6 +119,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(GLM_DIR)\include;$(NLOHMANN_JSON_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VOXELIT_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -123,13 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ObjImporter.cpp" />
+    <ClCompile Include="src\Importer.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\VoxelIt\Importer.hpp" />
     <ClInclude Include="include\voxelit\JsonSerializers.hpp" />
     <ClInclude Include="include\VoxelIt\Mesh.hpp" />
+    <ClInclude Include="include\voxelit\ObjImporter.hpp" />
     <ClInclude Include="include\VoxelIt\Prerequisites.hpp" />
+    <ClInclude Include="include\voxelit\Resource.hpp" />
+    <ClInclude Include="include\VoxelIt\IResourceImporter.hpp" />
     <ClInclude Include="include\VoxelIt\Vertex.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

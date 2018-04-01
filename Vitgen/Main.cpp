@@ -1,18 +1,20 @@
 #include <iostream>
-#include <VoxelIt/Mesh.hpp>
-#include <VoxelIt/Vertex.hpp>
-#include <VoxelIt/JsonSerializers.hpp>
-#include <nlohmann/json.hpp>
-using nlohmann::json;
+#include <VoxelIt/Importer.hpp>
+#include <VoxelIt/ObjImporter.hpp>
+using namespace std;
 
 int main(int argc, char **argv)
 {
-    vit::Mesh m;
-    vit::Vertex simpleVertex({ 1.0f, 0.0f, 1.0f });
+    try
+    {
+        vit::Importer imp;
+        imp.registerImporter(make_shared<vit::ObjImporter>());
 
-    json j = simpleVertex;
-
-    std::cout << std::setw(4) << j << std::endl;
-
+        auto monkey = imp.import("monkey.obj");
+    }
+    catch (runtime_error err)
+    {
+        cerr << err.what() << endl;
+    }
     return 0;
 }
