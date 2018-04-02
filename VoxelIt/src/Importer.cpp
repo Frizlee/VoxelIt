@@ -8,7 +8,7 @@ Importer::Importer()
 {
 }
 
-shared_ptr<Resource> Importer::import(experimental::filesystem::path filePath)
+shared_ptr<Resource> Importer::importResource(experimental::filesystem::path filePath)
 {
     try
     {
@@ -29,6 +29,10 @@ void Importer::registerImporter(shared_ptr<IResourceImporter> importer)
     auto extensions = importer->getSupportedExtensions();
 
     for (auto& ext : extensions)
-        mImporters.insert({ ext, importer });
+    {
+        auto stringExt = ext.generic_string();
+        transform(begin(stringExt), end(stringExt), begin(stringExt), ::tolower);
+        mImporters.insert({ stringExt, importer });
+    }
 }
 

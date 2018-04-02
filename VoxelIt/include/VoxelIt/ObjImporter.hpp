@@ -8,7 +8,7 @@ namespace vit
     {
     public:
         VOXELIT_API ObjImporter();
-        virtual std::vector<std::string> VOXELIT_API getSupportedExtensions() override;
+        virtual std::vector<std::experimental::filesystem::path> VOXELIT_API getSupportedExtensions() override;
         virtual std::shared_ptr<Resource> VOXELIT_API import(std::experimental::filesystem::path filePath) override;
     };
 }
