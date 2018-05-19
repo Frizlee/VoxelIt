@@ -151,6 +151,7 @@
     <ClCompile Include="src\ObjImporter.cpp" />
     <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Vertex.cpp" />
+    <ClCompile Include="src\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\VoxelIt\Face.hpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="include\voxelit\Resource.hpp" />
     <ClInclude Include="include\VoxelIt\IResourceImporter.hpp" />
     <ClInclude Include="include\VoxelIt\Vertex.hpp" />
+    <ClInclude Include="include\VoxelIt\Voxel.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
