@@ -1,22 +1,25 @@
 #include <VoxelIt/Mesh.hpp>
 #include <iostream>
+#include <algorithm>
 using namespace vit;
 using namespace std;
 
 Mesh::Mesh()
+    : mIsBoundingBox(false)
 {
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint16_t>& indices)
-    : mVertices(vertices), mIndices(indices)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<Face>& faces)
+    : mVertices(vertices), mFaces(faces), mIsBoundingBox(false)
 {
 
 }
 
-Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<uint16_t>&& indices)
+Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<Face>&& faces)
+    : mIsBoundingBox(false)
 {   
-    std::swap(mVertices, vertices);
-    std::swap(mIndices, indices);
+    swap(mVertices, vertices);
+    swap(mFaces, faces);
 }
 
 const vector<Vertex> Mesh::getVertices() const
@@ -24,17 +27,58 @@ const vector<Vertex> Mesh::getVertices() const
     return mVertices;
 }
 
-/*void Mesh::setVertices(vector<Vertex>& vertices)
+const vector<Face> Mesh::getFaces() const
 {
-    mVertices = vertices;
-}*/
-
-const vector<uint16_t> Mesh::getIndices() const
-{
-    return mIndices;
+    return mFaces;
 }
 
-/*void Mesh::setIndices(vector<uint16_t>& indices)
+const Mesh::BoundingBox VOXELIT_API vit::Mesh::getBoundingBox() const
 {
-    mIndices = indices;
-}*/
+    if (mIsBoundingBox)
+        return mBoundingBox;
+
+    if (mVertices.empty())
+    {
+        mIsBoundingBox = true;
+        return BoundingBox();
+    }
+
+    mBoundingBox.lower = mVertices[0].getPosition();
+    mBoundingBox.upper = mVertices[0].getPosition();
+
+    for (auto& v : mVertices) 
+    {
+        auto& pos = v.getPosition();
+
+        if (pos.x < mBoundingBox.lower.x)
+            mBoundingBox.lower.x = pos.x;
+
+        if (pos.y < mBoundingBox.lower.y)
+            mBoundingBox.lower.y = pos.y;
+
+        if (pos.z < mBoundingBox.lower.z)
+            mBoundingBox.lower.z = pos.z;
+
+        if (pos.x > mBoundingBox.upper.x)
+            mBoundingBox.upper.x = pos.x;
+
+        if (pos.y > mBoundingBox.upper.y)
+            mBoundingBox.upper.y = pos.y;
+
+        if (pos.z > mBoundingBox.upper.z)
+            mBoundingBox.upper.z = pos.z;
+    }
+
+    mIsBoundingBox = true;
+    return mBoundingBox;
+}
+
+void Mesh::onChange()
+{
+    mIsBoundingBox = false;
+}
+
+Mesh::BoundingBox::BoundingBox(glm::vec3 lower, glm::vec3 upper)
+    : lower(lower), upper(upper)
+{
+}

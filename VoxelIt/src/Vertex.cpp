@@ -8,7 +8,7 @@ Vertex::Vertex(vec3 position, vec3 color, vec3 normal)
 {
 }
 
-vec3 Vertex::getPosition() const
+const vec3 Vertex::getPosition() const
 {
     return mPosition;
 }
@@ -18,7 +18,7 @@ void Vertex::setPosition(vec3& position)
     mPosition = position;
 }
 
-vec3 Vertex::getColor() const
+const vec3 Vertex::getColor() const
 {
     return mColor;
 }
@@ -28,7 +28,7 @@ void Vertex::setColor(vec3& color)
     mColor = color;
 }
 
-vec3 Vertex::getNormal() const
+const vec3 Vertex::getNormal() const
 {
     return mNormal;
 }
