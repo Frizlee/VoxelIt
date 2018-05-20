@@ -32,7 +32,7 @@ const vector<Face> Mesh::getFaces() const
     return mFaces;
 }
 
-const Mesh::BoundingBox VOXELIT_API Mesh::getBoundingBox() const
+Mesh::BoundingBox VOXELIT_API Mesh::getBoundingBox() const
 {
     if (mIsBoundingBox)
         return mBoundingBox;

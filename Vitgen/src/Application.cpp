@@ -2,6 +2,7 @@
 #include <VoxelIt/ObjImporter.hpp>
 #include <VoxelIt/Mesh.hpp>
 #include <VoxelIt/JsonSerializers.hpp>
+#include <VoxelIt/MeshShapeConverter.hpp>
 #include <memory>
 #include <iostream>
 using namespace std;
@@ -24,10 +25,8 @@ void Application::run()
         return;
 
     auto monkey = mImporter.import<vit::Mesh>(mArgs.at(1));
-    auto bBox = monkey->getBoundingBox();
-
-    cout << setw(4) << "lower:\n" << nlohmann::json(bBox.lower)
-        << "\nupper:\n" << nlohmann::json(bBox.upper) << std::endl;
+    MeshShapeConverter converter(0.02);
+    auto voxelMonkey = converter.getShapeFromMesh(monkey);
 }
 
 bool Application::checkArgs()

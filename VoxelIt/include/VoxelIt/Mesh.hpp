@@ -24,7 +24,7 @@ namespace vit
 
         const std::vector<Vertex> VOXELIT_API getVertices() const;
         const std::vector<Face> VOXELIT_API getFaces() const;
-        const BoundingBox VOXELIT_API getBoundingBox() const;
+        BoundingBox VOXELIT_API getBoundingBox() const;
 
     private:
         void onChange();

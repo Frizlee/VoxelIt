@@ -148,8 +148,10 @@
     <ClCompile Include="src\Face.cpp" />
     <ClCompile Include="src\Importer.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshShapeConverter.cpp" />
     <ClCompile Include="src\ObjImporter.cpp" />
     <ClCompile Include="src\Resource.cpp" />
+    <ClCompile Include="src\Shape.cpp" />
     <ClCompile Include="src\Vertex.cpp" />
     <ClCompile Include="src\Voxel.cpp" />
   </ItemGroup>
@@ -158,10 +160,12 @@
     <ClInclude Include="include\VoxelIt\Importer.hpp" />
     <ClInclude Include="include\voxelit\JsonSerializers.hpp" />
     <ClInclude Include="include\VoxelIt\Mesh.hpp" />
+    <ClInclude Include="include\VoxelIt\MeshShapeConverter.hpp" />
     <ClInclude Include="include\voxelit\ObjImporter.hpp" />
     <ClInclude Include="include\VoxelIt\Prerequisites.hpp" />
     <ClInclude Include="include\voxelit\Resource.hpp" />
     <ClInclude Include="include\VoxelIt\IResourceImporter.hpp" />
+    <ClInclude Include="include\VoxelIt\Shape.hpp" />
     <ClInclude Include="include\VoxelIt\Vertex.hpp" />
     <ClInclude Include="include\VoxelIt\Voxel.hpp" />
   </ItemGroup>
