@@ -24,6 +24,24 @@ shared_ptr<Resource> Importer::importResource(experimental::filesystem::path fil
     }
 }
 
+
+
+bool Importer::saveResource(shared_ptr<Resource> resource, experimental::filesystem::path filePath)
+{
+    try
+    {
+        auto ext = filePath.extension().generic_string();
+        transform(begin(ext), end(ext), begin(ext), ::tolower);
+        auto importer = mImporters.at(ext);
+        return importer->save(resource, filePath);
+    }
+    catch (out_of_range)
+    {
+        // TODO: better exceptions.
+        throw std::runtime_error("Unsupported resource file extension!");
+    }
+}
+
 void Importer::registerImporter(shared_ptr<IResourceImporter> importer)
 {
     auto extensions = importer->getSupportedExtensions();

@@ -13,5 +13,6 @@ namespace vit
         virtual VOXELIT_API ~IResourceImporter() {};
         virtual std::vector<std::experimental::filesystem::path> VOXELIT_API getSupportedExtensions() = 0;
         virtual std::shared_ptr<Resource> VOXELIT_API import(std::experimental::filesystem::path filePath) = 0;
+        virtual bool VOXELIT_API save(std::shared_ptr<Resource> resource, std::experimental::filesystem::path filePath) = 0;
     };
 }

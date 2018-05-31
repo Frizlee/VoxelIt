@@ -16,6 +16,7 @@ namespace vit
         template<typename T>
         std::shared_ptr<T> import(std::experimental::filesystem::path filePath);
         std::shared_ptr<Resource> VOXELIT_API importResource(std::experimental::filesystem::path filePath);
+        bool VOXELIT_API saveResource(std::shared_ptr<Resource> resource, std::experimental::filesystem::path filePath);
         void VOXELIT_API registerImporter(std::shared_ptr<IResourceImporter> importer);
 
     private:

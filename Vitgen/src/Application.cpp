@@ -24,9 +24,12 @@ void Application::run()
     if (!checkArgs())
         return;
 
-    auto monkey = mImporter.import<vit::Mesh>(mArgs.at(1));
-    MeshShapeConverter converter(0.02);
-    auto voxelMonkey = converter.getShapeFromMesh(monkey);
+    auto obj = mImporter.import<vit::Mesh>(mArgs.at(1));
+    mImporter.saveResource(obj, "exporeted.obj");
+
+    MeshShapeConverter converter(1);
+    auto voxelObj = converter.getShapeFromMesh(obj);
+    auto voxelMesh = converter.getMeshFromShape(voxelObj);
 }
 
 bool Application::checkArgs()
