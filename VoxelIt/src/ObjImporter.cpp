@@ -55,11 +55,13 @@ bool ObjImporter::save(shared_ptr<Resource> resource, experimental::filesystem::
     aiScene scene;
     scene.mRootNode = new aiNode();
     scene.mMaterials = new aiMaterial*[1];
-    scene.mMaterials[0] = new aiMaterial();
+    scene.mMaterials[0] = nullptr;
     scene.mNumMaterials = 1;
+    scene.mMaterials[0] = new aiMaterial();
     scene.mMeshes = new aiMesh*[1];
-    scene.mMeshes[0] = new aiMesh();
+    scene.mMeshes[0] = nullptr;
     scene.mNumMeshes = 1;
+    scene.mMeshes[0] = new aiMesh();
     scene.mMeshes[0]->mMaterialIndex = 0;
     scene.mRootNode->mMeshes = new unsigned int[1];
     scene.mRootNode->mMeshes[0] = 0;
@@ -93,6 +95,6 @@ bool ObjImporter::save(shared_ptr<Resource> resource, experimental::filesystem::
             face.mIndices[it2 - begin(indices)] = *it2;
     }
 
-    exporter.Export(&scene, "obj", filePath.string());
-    return true;
+    auto result = exporter.Export(&scene, "obj", filePath.string());
+    return result == AI_SUCCESS;
 }

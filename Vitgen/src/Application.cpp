@@ -25,11 +25,10 @@ void Application::run()
         return;
 
     auto obj = mImporter.import<vit::Mesh>(mArgs.at(1));
-    mImporter.saveResource(obj, "exporeted.obj");
-
     MeshShapeConverter converter(1);
     auto voxelObj = converter.getShapeFromMesh(obj);
     auto voxelMesh = converter.getMeshFromShape(voxelObj);
+    mImporter.saveResource(voxelMesh, "exporeted.obj");
 }
 
 bool Application::checkArgs()

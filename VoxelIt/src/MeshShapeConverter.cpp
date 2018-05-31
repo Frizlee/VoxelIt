@@ -168,7 +168,53 @@ shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<co
 
 shared_ptr<Mesh> VOXELIT_API MeshShapeConverter::getMeshFromShape(shared_ptr<const Shape> shape)
 {
-    throw runtime_error("Not implemented");
+    auto voxels = shape->getVoxels();
+    auto voxelSize = shape->getVoxelSize();
+    vector<Face> faces;
+    vector<Vertex> vertices;
+
+    for (auto it = begin(voxels); it != end(voxels); ++it)
+    {
+        auto i = static_cast<uint16_t>((it - begin(voxels)) * 8);
+        auto i1 = static_cast<uint16_t>(i + 1);
+        auto i2 = static_cast<uint16_t>(i + 2);
+        auto i3 = static_cast<uint16_t>(i + 3);
+        auto i4 = static_cast<uint16_t>(i + 4);
+        auto i5 = static_cast<uint16_t>(i + 5);
+        auto i6 = static_cast<uint16_t>(i + 6);
+        auto i7 = static_cast<uint16_t>(i + 7);
+        auto pos = it->getPosition();
+
+        vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize, pos.z * voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize, pos.z * voxelSize }));
+
+        //front
+        faces.push_back(Face({ i, i1, i2 }));
+        faces.push_back(Face({ i2, i3, i }));
+        //back
+        faces.push_back(Face({ i7, i6, i5 }));
+        faces.push_back(Face({ i5, i4, i7 }));
+        //left
+        faces.push_back(Face({ i4, i5, i1 }));
+        faces.push_back(Face({ i1, i, i4 }));
+        //right
+        faces.push_back(Face({ i3, i2, i6 }));
+        faces.push_back(Face({ i6, i7, i3 }));
+        //top
+        faces.push_back(Face({ i1, i5, i6 }));
+        faces.push_back(Face({ i6, i2, i1 }));
+        //bottom
+        faces.push_back(Face({ i4, i, i3 }));
+        faces.push_back(Face({ i3, i7, i4 }));
+    }
+
+    return make_shared<Mesh>(vertices, faces);
 }
 
 float VOXELIT_API MeshShapeConverter::getVoxelSize() const
