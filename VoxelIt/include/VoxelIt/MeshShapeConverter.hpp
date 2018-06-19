@@ -22,7 +22,7 @@ namespace vit
         bool checkIntersect(glm::vec2 rectOrig, float width, glm::vec2 a, glm::vec2 b, glm::vec2 c);
         bool checkPointInTriangle(glm::vec2 p, glm::vec2 a, glm::vec2 b, glm::vec2 c);
         bool checkPointInRectangle(glm::vec2 p, glm::vec2 rectOrig, float width);
-        float planeFunc(glm::vec3 a, glm::vec3 b, glm::vec3 c, float x, float y);
+        float planeFunc(glm::vec3 a, glm::vec3 b, glm::vec3 c, float x, float y, float voxelSize);
 
         float mVoxelSize;
         bool mOverrideSize;

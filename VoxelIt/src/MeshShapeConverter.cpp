@@ -1,5 +1,6 @@
 #include <VoxelIt/MeshShapeConverter.hpp>
 #include <fstream>
+#include <unordered_set>
 using namespace vit;
 using namespace std;
 using glm::vec2;
@@ -16,7 +17,7 @@ MeshShapeConverter::MeshShapeConverter(float voxelSize, bool overrideSize)
 
 shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<const Mesh> mesh)
 {
-    vector<Voxel> voxels;
+    unordered_set<Voxel> voxels;
     auto bBox = mesh->getBoundingBox();
     auto faces = mesh->getFaces();
     auto vertices = mesh->getVertices();
@@ -40,6 +41,14 @@ shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<co
     {
         if (face.getIndexCount() != 3)
             throw runtime_error("Unsupported mesh format");
+
+        // clear planes
+        fill(begin(xyPlane), end(xyPlane), 0);
+        fill(begin(zyPlane), end(zyPlane), 0);
+        fill(begin(xzPlane), end(xzPlane), 0);
+        xyCount = 0;
+        zyCount = 0;
+        xzCount = 0;
 
         auto indices = face.getIndices();
         auto a = vertices[indices[0]].getPosition();
@@ -111,8 +120,8 @@ shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<co
                     if (xyPlane[(j - planesLower.y) * width + (i - planesLower.x)] != 1)
                         continue;
 
-                    int32_t z = planeFunc(a, b, c, i * mVoxelSize + mVoxelSize / 2, j * mVoxelSize + mVoxelSize / 2) / mVoxelSize;
-                    voxels.push_back(Voxel({ i, j, z }));
+                    int32_t z = planeFunc(a, b, c, i * mVoxelSize, j * mVoxelSize, mVoxelSize) / mVoxelSize;
+                    voxels.insert(Voxel({ i, j, z }));
                 }
             }
         }
@@ -128,8 +137,8 @@ shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<co
                     auto newA = vec3(a.z, a.y, a.x);
                     auto newB = vec3(b.z, b.y, b.x);
                     auto newC = vec3(c.z, c.y, c.x);
-                    int32_t x = planeFunc(newA, newB, newC, i * mVoxelSize + mVoxelSize / 2, j * mVoxelSize + mVoxelSize / 2) / mVoxelSize;
-                    voxels.push_back(Voxel({ x, j, i }));
+                    int32_t x = planeFunc(newA, newB, newC, i * mVoxelSize, j * mVoxelSize, mVoxelSize) / mVoxelSize;
+                    voxels.insert(Voxel({ x, j, i }));
                 }
             }
         }
@@ -145,25 +154,17 @@ shared_ptr<Shape> VOXELIT_API MeshShapeConverter::getShapeFromMesh(shared_ptr<co
                     auto newA = vec3(a.x, a.z, a.y);
                     auto newB = vec3(b.x, b.z, b.y);
                     auto newC = vec3(c.x, c.z, c.y);
-                    int32_t y = planeFunc(newA, newB, newC, i * mVoxelSize + mVoxelSize / 2, j * mVoxelSize + mVoxelSize / 2) / mVoxelSize;
-                    voxels.push_back(Voxel({ i, y, j }));
+                    int32_t y = planeFunc(newA, newB, newC, i * mVoxelSize, j * mVoxelSize, mVoxelSize) / mVoxelSize;
+                    voxels.insert(Voxel({ i, y, j }));
                 }
             }
         }
     }
 
-    for (size_t i = 0; i < voxels.size(); ++i)
-    {
-        for (auto it = begin(voxels) + i + 1; it != end(voxels);)
-        {
-            if (voxels[i].getPosition() == it->getPosition())
-                it = voxels.erase(it);
-            else
-                ++it;
-        }
-    }
+    vector<Voxel> output;
+    copy(begin(voxels), end(voxels), back_inserter(output));
 
-    return make_shared<Shape>(mVoxelSize, voxels);
+    return make_shared<Shape>(mVoxelSize, output);
 }
 
 shared_ptr<Mesh> VOXELIT_API MeshShapeConverter::getMeshFromShape(shared_ptr<const Shape> shape)
@@ -185,33 +186,36 @@ shared_ptr<Mesh> VOXELIT_API MeshShapeConverter::getMeshFromShape(shared_ptr<con
         auto i7 = static_cast<uint16_t>(i + 7);
         auto pos = it->getPosition();
 
+        // Front
         vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize, pos.z * voxelSize + voxelSize }));
-        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize + voxelSize }));
-        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize, pos.z * voxelSize + voxelSize }));
         vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize, pos.z * voxelSize + voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize + voxelSize }));
+
+        // Back
         vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize, pos.z * voxelSize }));
         vertices.push_back(Vertex({ pos.x * voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize }));
-        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize }));
         vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize, pos.z * voxelSize }));
+        vertices.push_back(Vertex({ pos.x * voxelSize + voxelSize, pos.y * voxelSize + voxelSize, pos.z * voxelSize }));
 
         //front
-        faces.push_back(Face({ i, i1, i2 }));
-        faces.push_back(Face({ i2, i3, i }));
+        faces.push_back(Face({ i, i2, i1 }));
+        faces.push_back(Face({ i1, i2, i3 }));
         //back
-        faces.push_back(Face({ i7, i6, i5 }));
-        faces.push_back(Face({ i5, i4, i7 }));
+        faces.push_back(Face({ i6, i4, i7 }));
+        faces.push_back(Face({ i7, i4, i5 }));
         //left
-        faces.push_back(Face({ i4, i5, i1 }));
-        faces.push_back(Face({ i1, i, i4 }));
+        faces.push_back(Face({ i4, i, i5 }));
+        faces.push_back(Face({ i5, i, i1 }));
         //right
-        faces.push_back(Face({ i3, i2, i6 }));
-        faces.push_back(Face({ i6, i7, i3 }));
+        faces.push_back(Face({ i2, i6, i3 }));
+        faces.push_back(Face({ i3, i6, i7 }));
         //top
-        faces.push_back(Face({ i1, i5, i6 }));
-        faces.push_back(Face({ i6, i2, i1 }));
+        faces.push_back(Face({ i1, i3, i5 }));
+        faces.push_back(Face({ i5, i3, i7 }));
         //bottom
-        faces.push_back(Face({ i4, i, i3 }));
-        faces.push_back(Face({ i3, i7, i4 }));
+        faces.push_back(Face({ i4, i6, i }));
+        faces.push_back(Face({ i, i6, i2 }));
     }
 
     return make_shared<Mesh>(vertices, faces);
@@ -305,14 +309,15 @@ bool MeshShapeConverter::checkPointInRectangle(vec2 p, vec2 rectOrig, float widt
         v.y <= width && v.y >= 0;
 }
 
-float MeshShapeConverter::planeFunc(vec3 p, vec3 q, vec3 r, float x, float y)
+float MeshShapeConverter::planeFunc(vec3 p, vec3 q, vec3 r, float x, float y, float voxelSize)
 {
     auto v1 = p - q;
     auto v2 = p - r;
     auto cross12 = cross(v1, v2);
+
     auto a = cross12.x;
     auto b = cross12.y;
     auto c = cross12.z;
 
-    return (a * (x + p.x) + b * (y + p.y)) / -c - p.z;
+    return (-(a * (x - p.x) + b * (y - p.y)) / c) + p.z - (cross12.z < 0 ? voxelSize : 0.0);
 }

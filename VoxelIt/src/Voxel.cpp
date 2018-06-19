@@ -30,3 +30,7 @@ void VOXELIT_API Voxel::setColor(vec3& color)
     mColor = color;
 }
 
+bool Voxel::operator==(const Voxel &other) const
+{
+    return (mPosition == other.mPosition && mColor == other.mColor);
+}
